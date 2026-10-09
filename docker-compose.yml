@@ -1,0 +1,48 @@
+services:
+  app:
+    image: php:8.4-cli
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: php artisan serve --host=0.0.0.0 --port=8000
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: local
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: missao_publica
+      DB_USERNAME: missao
+      DB_PASSWORD: missao
+      OLLAMA_URL: http://ollama:11434
+    depends_on:
+      - postgres
+      - ollama
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: missao_publica
+      POSTGRES_USER: missao
+      POSTGRES_PASSWORD: missao
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U missao -d missao_publica"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+
+volumes:
+  postgres-data:
+  ollama-data:

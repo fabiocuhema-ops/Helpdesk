@@ -2,7 +2,7 @@
 
 ## Componentes
 
-- Laravel 13: API, autorizacao, transicoes, banco, worker e renderizacao inicial.
+- Laravel 13: login por sessao, API protegida, autorizacao, transicoes, banco, worker e renderizacao inicial.
 - React + TypeScript + Vite: experiencia web/mobile responsiva.
 - SQLite local por padrao para demo imediata; PostgreSQL previsto no `docker-compose.yml`.
 - Ollama local: IA configurada por `OLLAMA_URL` e `OLLAMA_MODEL`.
@@ -10,6 +10,7 @@
 - Outbox: tabela `outbox_events`, gravada na mesma transacao da mudanca da demanda.
 - Worker: `php artisan app:sync-mission-outbox`.
 - PWA/Web Push: `public/sw.js`, endpoint `/api/push/subscribe`, variaveis VAPID.
+- Evidencias privadas: upload para disco local privado, metadados em `evidences` e download autorizado por perfil.
 
 ## Estados
 
@@ -19,7 +20,7 @@ Estados alternativos: `blocked`, `pending_analysis`, `cancelled`.
 
 ## Permissoes
 
-- Administrador: acesso demo amplo.
+- Administrador: cadastros, configuracoes, integracoes e indicadores gerais.
 - Atendente: cria/importa demandas e consulta andamento.
 - Gestor: atribui, desbloqueia, cancela e consulta indicadores.
 - Executor: inicia, bloqueia, retoma apos apoio e conclui demandas atribuidas.

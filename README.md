@@ -16,7 +16,7 @@ Prototipo funcional no projeto Helpdesk para acompanhamento e execucao de tarefa
 ```bash
 composer install
 npm install
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 npm run build
 php artisan serve --host=127.0.0.1 --port=8000
 ```
@@ -24,12 +24,12 @@ php artisan serve --host=127.0.0.1 --port=8000
 Abra:
 
 ```text
-http://127.0.0.1:8000
+http://127.0.0.1:8000/login
 ```
 
 ## Usuarios demo
 
-Todos usam senha `demo1234`. A interface permite trocar o perfil demo sem digitar senha para acelerar a apresentacao.
+Todos usam senha `demo1234` somente no ambiente de demonstracao. Nao ha cadastro publico e o seletor de perfil foi removido.
 
 - `admin@missao.local`
 - `atendente@missao.local`
@@ -47,6 +47,19 @@ npm run typecheck
 npm run build
 vendor/bin/pint --dirty --format agent
 ```
+
+## Paginas principais
+
+- `/login`
+- `/visao-geral`
+- `/demandas`
+- `/demandas/nova`
+- `/minhas-missoes`
+- `/minhas-solicitacoes`
+- `/indicadores`
+- `/reconhecimento`
+- `/integracoes`
+- `/administracao`
 
 ## Docker Compose
 
@@ -82,6 +95,7 @@ O prototipo registra service worker e inscricao. Para teste fisico em celular, u
 ## Documentacao
 
 - `docs/plano-implementacao.md`
+- `docs/matriz-permissoes.md`
 - `docs/matriz-requisitos.md`
 - `docs/arquitetura.md`
 - `docs/roteiro-demo.md`

@@ -21,34 +21,34 @@ class MissionPublicaFlowTest extends TestCase
         $manager = User::where('email', 'gestor@missao.local')->firstOrFail();
         $requester = User::where('email', 'demandante@missao.local')->firstOrFail();
 
-        $this->withSession(['demo_user_id' => $executor->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($executor)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'start',
             'lock_version' => $demand->lock_version,
         ])->assertOk()->assertJsonPath('status', 'in_progress');
 
         $demand->refresh();
-        $this->withSession(['demo_user_id' => $executor->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($executor)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'block',
             'description' => 'Sem conector RJ45 no almoxarifado.',
             'lock_version' => $demand->lock_version,
         ])->assertOk()->assertJsonPath('status', 'blocked');
 
         $demand->refresh();
-        $this->withSession(['demo_user_id' => $manager->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($manager)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'unblock',
             'description' => 'Material entregue ao tecnico.',
             'lock_version' => $demand->lock_version,
         ])->assertOk()->assertJsonPath('status', 'in_progress');
 
         $demand->refresh();
-        $this->withSession(['demo_user_id' => $executor->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($executor)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'complete',
             'description' => 'Ponto refeito, identificado e testado.',
             'lock_version' => $demand->lock_version,
         ])->assertOk()->assertJsonPath('status', 'awaiting_validation');
 
         $demand->refresh();
-        $this->withSession(['demo_user_id' => $requester->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($requester)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'confirm',
             'description' => 'Funcionando corretamente.',
             'rating' => 5,
@@ -66,12 +66,12 @@ class MissionPublicaFlowTest extends TestCase
         $requester = User::where('email', 'demandante@missao.local')->firstOrFail();
         $executor = User::where('email', 'executor@missao.local')->firstOrFail();
 
-        $this->withSession(['demo_user_id' => $requester->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($requester)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'assign',
             'lock_version' => $demand->lock_version,
         ])->assertForbidden();
 
-        $this->withSession(['demo_user_id' => $executor->id])->postJson("/api/demands/{$demand->id}/transition", [
+        $this->actingAs($executor)->postJson("/api/demands/{$demand->id}/transition", [
             'action' => 'start',
             'lock_version' => 999,
         ])->assertStatus(409);

@@ -64,4 +64,9 @@ class Demand extends Model
     {
         return $this->hasMany(DemandEvent::class);
     }
+
+    public function evidences(): HasMany
+    {
+        return $this->hasMany(Evidence::class);
+    }
 }
